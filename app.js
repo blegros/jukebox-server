@@ -82,8 +82,6 @@ app.set('port', config.port);
 app.use(express.favicon());
 app.use(express.logger(config.logger.level));
 app.use(express.compress());
-app.use(express.cookieParser(config.secrets.cookie));
-app.use(express.session({ secret: config.secrets.session }));
 app.use(express.json());
 app.use(express.methodOverride());
 app.use(app.router);
