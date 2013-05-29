@@ -1,12 +1,28 @@
 {
-  "name": "jukebox",
+  "name": "jukebox-server",
   "version": "0.0.1",
+  "author": "Brian LeGros <me@brianlegros.com>",
+  "description": "RESTful services for use with multiple Jukebox clients",
+  "keywords": ["music", "jukebox", "social"],
   "private": true,
+  "main": "./app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node ./app.js"
   },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/blegros/jukebox-server.git"
+  },
+  "engines": {
+      "node": "0.10.x",
+      "npm": "1.2.x"
+  },
+  "bundledDependencies": ["node-migrate"],
   "dependencies": {
     "express": "3.2.5",
-    "sequelize": "*"
+    "express-resource": "1.0.0",
+    "sequelize": "1.7.0-alpha2",
+    "sequelize-sqlite": "1.7.0-alpha2",
+    "sqlite3": "2.1.7"
   }
 }
