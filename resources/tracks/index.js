@@ -24,6 +24,14 @@ module.exports = function(models) {
             res.send(501);
         },
 
+        showRecent: function (req, res) {
+            res.send(501);
+        },
+
+        showQueued: function (req, res) {
+            res.send(501);
+        },
+
         create: function (req, res) {
             var template = req.body;
             var jukebox = req.jukebox;
