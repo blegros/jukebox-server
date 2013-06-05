@@ -1,85 +1,110 @@
-module.exports = function (sequelize, DataTypes) {
+var crypto = require('crypto');
+
+module.exports = function (config, mongoose) {
     "use strict";
 
-    var crypto = require('crypto');
-    var config = require('../config/default.json');  //sucks to do this rather than pass it in, but this is not imported via require
+    var schemaOptions = {
+        capped: 268435456 //256MB
+    };
 
-    var hashPassword = function (password, salt) {
-            var checksum = crypto.createHash('sha1');
-            checksum.update(salt + password);
+    var clientDefinition = {
+        qualifier: String
+    };
 
-            return checksum.digest().toString();
-        };
-
-    return sequelize.define('Jukebox', {
-            id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true,
-                autoIncrement: true
+    var trackDefinition = {
+        trackId: String,
+        queuedAt: Date,
+        playedAt: Date,
+        votes: {
+            likes: {
+                type: Number,
+                default: 0
             },
-            name: DataTypes.STRING,
-            address: DataTypes.STRING,
-            city: DataTypes.STRING,
-            state: DataTypes.STRING,
-            postalCode: DataTypes.STRING,
-            locationLat: {
-                type: DataTypes.DECIMAL,
-                validate: {
-                    notNull: true,
-                    isDecimal: true
-                }
-            },
-            locationLong: {
-                type: DataTypes.DECIMAL,
-                validate: {
-                    notNull: true,
-                    isDecimal: true
-                }
-            },
-            password: DataTypes.STRING,
-            clientPassword: DataTypes.STRING,
-            masterVolumeLevel: {
-                type: DataTypes.INTEGER,
-                validation: {
-                    notNull: true,
-                    isInt: true
-                }
-            },
-            maxQueuesPerClient: {
-                type: DataTypes.INTEGER,
-                validation: {
-                    notNull: true,
-                    isInt: true
-                }
-            },
-            maxQueueLength: {
-                type: DataTypes.INTEGER,
-                validation: {
-                    notNull: true,
-                    isInt: true
-                }
-            },
-            crossFadeTracks: DataTypes.BOOLEAN
-        },
-        {
-            tableName: 'jukeboxes',
-            instanceMethods: {
-                getLocation: function () {
-                    return {lat: this.location_lat, long: this.location_long};
-                },
-                encodePassword: function (new_password) {
-                    this.password = hashPassword(new_password, config.secrets.password_salt);
-                },
-                verifyPassword: function (clear_text_password) {
-                    return (this.password === hashPassword(clear_text_password, config.secrets.password_salt));
-                },
-                encodeClientPassword: function (new_password) {
-                    this.clientPassword = hashPassword(new_password, config.secrets.client_password_salt);
-                },
-                verifyClientPassword: function (clear_text_password) {
-                    return (this.password === hashPassword(clear_text_password, config.secrets.client_password_salt));
-                }
+            dislikes: {
+                type: Number,
+                default: 0
             }
         }
-    );
+    };
+
+    var schema = mongoose.Schema({
+        name: String,
+        address: String,
+        city: String,
+        state: String,
+        postalCode: String,
+        location: [Number],
+        password: String,
+        clientPassword: String,
+        masterVolumeLevel: {
+            type: Number,
+            min: 0,
+            max: 10
+        },
+        maxQueuesPerClient: Number,
+        maxQueueLength: Number,
+        crossFadeTracks: Boolean,
+        tracks: [trackDefinition],
+        clients: [clientDefinition]
+    }, schemaOptions);
+
+    //add unique index by address
+    schema.index({ address: 1, city: 1, state: 1, postalCode: 1}, { unique: true });
+
+    //add geo-index for lat/long
+    schema.index({ location: '2d' });
+
+    /**
+     * Applies an SHA1 hashing algorithm with the provided salt
+     *
+     * @param password
+     * @param salt
+     * @returns {string}
+     */
+    var hashPassword = function (password, salt) {
+        var checksum = crypto.createHash('sha1');
+        checksum.update(password + salt);
+
+        return checksum.digest('hex').toString();
+    };
+
+    /**
+     * Encodes the password to administer the Jukebox
+     *
+     * @param new_password
+     */
+    schema.methods.encodePassword = function (new_password) {
+        this.password = hashPassword(new_password, config.secrets.password_salt);
+    };
+
+    /**
+     * Verifies the provided clear text password matched the stored password hash to administer the Jukebox
+     *
+     * @param clear_text_password
+     * @returns {boolean}
+     */
+    schema.methods.verifyPassword = function (clear_text_password) {
+        return (this.password === hashPassword(clear_text_password, config.secrets.password_salt));
+    };
+
+    /**
+     * Encodes the password to connect to the jukebox
+     *
+     * @param new_password
+     */
+    schema.methods.encodeClientPassword = function (new_password) {
+        this.clientPassword = hashPassword(new_password, config.secrets.client_password_salt);
+    };
+
+    /**
+     * Verifies the provided clear text password matched the stored password hash to connect to the Jukebox
+     *
+     * @param clear_text_password
+     * @returns {boolean}
+     */
+    schema.methods.verifyClientPassword = function (clear_text_password) {
+        return (this.password === hashPassword(clear_text_password, config.secrets.client_password_salt));
+    };
+
+    return mongoose.model('Jukebox', schema);
 };

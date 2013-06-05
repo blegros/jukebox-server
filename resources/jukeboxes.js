@@ -3,15 +3,11 @@ module.exports = function (models) {
 
     var Jukebox = models.Jukebox;
 
-    var onDbError = function (errors) {
-        console.error(errors);
-    };
-
     return {
         load: function (req, id, fn) {
-            Jukebox.find(id).success(function (jukebox) {
+            Jukebox.findById(id, '-tracks -clients', function (err, jukebox) {
                 fn(null, jukebox);
-            }).error(onDbError);
+            });
         },
 
         findNearest: function (req, res) {
@@ -20,9 +16,8 @@ module.exports = function (models) {
 
         create: function (req, res) {
             var template = req.body;
-            template.id = null;
 
-            var jukebox = Jukebox.build(template);
+            var jukebox = new Jukebox(template);
             if (jukebox.password) {
                 jukebox.encodePassword(jukebox.password);
             }
@@ -31,17 +26,15 @@ module.exports = function (models) {
                 jukebox.encodeClientPassword(jukebox.clientPassword);
             }
 
-            var errors = jukebox.validate();
+            jukebox.save(function (err, created) {
+                if (err) {
+                    res.json(400, err);
+                    return;
+                }
 
-            if (errors) {
-                res.json(400, errors);
-                return;
-            }
-
-            jukebox.save().success(function (created) {
                 res.location('/jukeboxes/' + created.id);
                 res.send(201);
-            }).error(onDbError);
+            });
         },
 
         show: function (req, res) {
@@ -54,16 +47,26 @@ module.exports = function (models) {
 
         update: function (req, res) {
             var jukebox = req.jukebox;
-            jukebox.updateAttributes(req.body).success(function (updated) {
+            jukebox.findByIdAndUpdate(jukebox._id, { $set: req.body }, function (err, updated) {
+                if (err) {
+                    res.json(400, err);
+                    return;
+                }
+
                 res.json(updated);
-            }).error(onDbError);
+            });
         },
 
         destroy: function (req, res) {
             var jukebox = req.jukebox;
-            jukebox.destroy().success(function () {
+            jukebox.remove(function (err) {
+                if(err) {
+                    res.json(500, err);
+                    return;
+                }
+
                 res.send(200);
-            }).error(onDbError);
+            });
         }
     };
 };

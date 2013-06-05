@@ -4,12 +4,5 @@
 	"city": "Indialantic",
 	"state": "Florida",
 	"postalCode": "32903",
-	"locationLat": 0,
-	"locationLong": 0,
-	"masterVolumeLevel": 11,
-	"maxQueuesPerClient": 0,
-	"maxQueueLength": 0,
-	"password": "abcdefg",
-	"clientPassword": "zyxwvut",
-    "crossFadeTracks": true
+	"location": [0, 0]
 }

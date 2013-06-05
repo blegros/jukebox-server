@@ -1,13 +1,12 @@
 {
     "database": {
-        "name": "Jukebox",
+        "name": "jukebox",
         "username": "",
         "password": "",
-        "location": "db/jukebox.sqlite3"
+        "host": "localhost",
+        "port": 27017
     },
     "secrets": {
-        "cookie": "0a1bc3d4e5",
-        "session": "0zy9x8w7",
         "password_salt": "776djl23!#23svkl;",
         "client_password_salt": "987ofjalksj2or90*#$"
     },

@@ -48,7 +48,7 @@ module.exports = function(models) {
                 track.setJukebox(req.jukebox);
 
                 track.save().success(function (finalTrack) {
-                    res.location('/jukeboxes/' + jukebox.id + '/tracks/' + finalTrack.id);
+                    res.location('/jukeboxes/' + jukebox._id + '/tracks/' + finalTrack.trackId);
                     res.send(201);
                 }).error(onDbError);
             }).error(onDbError);

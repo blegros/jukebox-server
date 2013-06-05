@@ -79,7 +79,6 @@ var config = require('./config/default.json');
 
 //configure express
 app.set('port', config.port);
-app.use(express.favicon());
 app.use(express.logger(config.logger.level));
 app.use(express.compress());
 app.use(express.json());
@@ -93,7 +92,8 @@ app.use(function (err, req, res, next) {
 });
 
 // configure ORM and load model definitions
-app.set('models', require('./models')(config.database));
+var models = require('./models')(config);
+app.set('models', models);
 
 //setup routes
 require("./resources")(app, app.get('models'));

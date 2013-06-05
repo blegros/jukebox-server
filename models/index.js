@@ -1,26 +1,18 @@
-module.exports = function (databaseConfig) {
+module.exports = function (config) {
     "use strict";
 
-    var Sequelize = require('sequelize');
-    var sequelize = new Sequelize(databaseConfig.name, databaseConfig.username, databaseConfig.password, {
-        dialect: 'sqlite',
-        storage: __dirname + '/../' + databaseConfig.location
-    });
+    var mongoose = require('mongoose'),
+        models = {};
 
-    //make sure we pass back a handle to sequelize to query with
-    var models = {
-        sequelize: sequelize
-    };
+    //load document definitions
+    models.Jukebox = require('./Jukebox')(config, mongoose);
 
-    //import models
-    var modelDefinitions = ['Jukebox', 'Track'];
-    modelDefinitions.forEach(function (modelDefinition) {
-        models[modelDefinition] = sequelize.import(__dirname + '/' + modelDefinition);
-    });
+    //open connection to mongo db instance
+    mongoose.connect("mongodb://" + config.database.host + ":" + config.database.port + "/" + config.database.name);
 
-    // describe relationships
-    models.Jukebox.hasMany(models.Track);
-    models.Track.belongsTo(models.Jukebox);
+    //setup default error handler
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
 
     return models;
 };
