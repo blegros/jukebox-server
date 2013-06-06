@@ -4,7 +4,9 @@ module.exports = function (config) {
     var mongoose = require('mongoose'),
         models = {};
 
-    //load document definitions
+    //load schema definitions
+    models.Client = require('./Client')(config, mongoose);
+    models.Track = require('./Track')(config, mongoose);
     models.Jukebox = require('./Jukebox')(config, mongoose);
 
     //open connection to mongo db instance

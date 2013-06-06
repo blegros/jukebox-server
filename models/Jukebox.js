@@ -3,31 +3,7 @@ var crypto = require('crypto');
 module.exports = function (config, mongoose) {
     "use strict";
 
-    var schemaOptions = {
-        capped: 268435456 //256MB
-    };
-
-    var clientDefinition = {
-        qualifier: String
-    };
-
-    var trackDefinition = {
-        trackId: String,
-        queuedAt: Date,
-        playedAt: Date,
-        votes: {
-            likes: {
-                type: Number,
-                default: 0
-            },
-            dislikes: {
-                type: Number,
-                default: 0
-            }
-        }
-    };
-
-    var schema = mongoose.Schema({
+    var schema = new mongoose.Schema({
         name: String,
         address: String,
         city: String,
@@ -44,15 +20,11 @@ module.exports = function (config, mongoose) {
         maxQueuesPerClient: Number,
         maxQueueLength: Number,
         crossFadeTracks: Boolean,
-        tracks: [trackDefinition],
-        clients: [clientDefinition]
-    }, schemaOptions);
-
-    //add unique index by address
-    schema.index({ address: 1, city: 1, state: 1, postalCode: 1}, { unique: true });
-
-    //add geo-index for lat/long
-    schema.index({ location: '2d' });
+        tracks: [mongoose.Schema.Types.ObjectId],
+        clients: [mongoose.Schema.Types.ObjectId]
+    }, {
+        autoIndex: false
+    });
 
     /**
      * Applies an SHA1 hashing algorithm with the provided salt
