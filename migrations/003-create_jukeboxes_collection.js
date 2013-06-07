@@ -1,49 +1,33 @@
-var mongodb = require('mongodb'),
-    config = require('../config/default.json');
-
-var client = mongodb.MongoClient;
-var url = "mongodb://" + config.database.host + ":" + config.database.port + "/" + config.database.name;
+var Q = require('q'),
+    Helper = require('./migrationHelper')();
 
 exports.up = function (next) {
-    client.connect(url, function (err, db) {
-        "use strict";
-
-        db.createCollection('jukeboxes', function(err, collection) {
-            if(err){
-                console.log(err);
-            }
-
-            collection.ensureIndex({ address: 1, city: 1, state: 1, postalCode: 1}, { unique: true }, function(err, indexName){
-                if(err){
-                    console.log(err);
-                }
-
-                collection.ensureIndex({ location: '2dsphere' }, function(err, indexName){
-                    if(err){
-                        console.log(err);
-                    }
-
-                    db.close();
-
-                    next();
+    Helper.connect
+        .then(function (db) {
+            return Q.ninvoke(db, 'createCollection', 'jukeboxes');
+        })
+        .then(function (collection) {
+            return Q.ninvoke(collection, 'ensureIndex', { address: 1, city: 1, state: 1, postalCode: 1}, { unique: true })
+                .then(function () {
+                    return collection;
                 });
-            });
+        })
+        .then(function (collection) {
+            return Q.ninvoke(collection, 'ensureIndex', { location: '2dsphere' });
+        })
+        .then(Helper.close)
+        .then(function () {
+            next();
         });
-    });
 };
 
 exports.down = function (next) {
-    client.connect(url, function (err, db) {
-        "use strict";
-
-        db.dropCollection('jukeboxes', function(err, result) {
-            if(err){
-                console.log(err);
-            }
-
-            db.close();
-
+    Helper.connect
+        .then(function (db) {
+            return Q.ninvoke(db, 'dropCollection', 'jukeboxes');
+        })
+        .then(Helper.close)
+        .then(function () {
             next();
         });
-    });
 };

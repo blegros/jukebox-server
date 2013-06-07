@@ -1,37 +1,24 @@
-var mongodb = require('mongodb'),
-    config = require('../config/default.json');
-
-var client = mongodb.MongoClient;
-var url = "mongodb://" + config.database.host + ":" + config.database.port + "/" + config.database.name;
+var Q = require('q'),
+    Helper = require('./migrationHelper')();
 
 exports.up = function (next) {
-    client.connect(url, function (err, db) {
-        "use strict";
-
-        db.createCollection('clients', function(err, collection) {
-            if(err){
-                console.log(err);
-            }
-
-            db.close();
-
+    Helper.connect
+        .then(function (db) {
+            return Q.ninvoke(db, 'createCollection', 'clients');
+        })
+        .then(Helper.close)
+        .then(function () {
             next();
         });
-    });
 };
 
 exports.down = function (next) {
-    client.connect(url, function (err, db) {
-        "use strict";
-
-        db.dropCollection('clients', function(err, result) {
-            if(err){
-                console.log(err);
-            }
-
-            db.close();
-
+    Helper.connect
+        .then(function (db) {
+            return Q.ninvoke(db, 'dropCollection', 'clients');
+        })
+        .then(Helper.close)
+        .then(function () {
             next();
         });
-    });
 };

@@ -11,7 +11,19 @@ module.exports = function (models) {
         },
 
         findNearest: function (req, res) {
-            res.send(501);
+            var locationLat = req.params.lat;
+            var locationLong = req.params.long;
+
+            Jukebox.nearSphere("location", {
+                geometry: {
+                    type: "Point",
+                    coordinates: [locationLong, locationLat]
+                }
+            })
+                .maxDistance(25)
+                .exec(function (err, jukeboxes) {
+                    res.json(jukeboxes);
+                });
         },
 
         create: function (req, res) {
@@ -47,7 +59,7 @@ module.exports = function (models) {
 
         update: function (req, res) {
             var jukebox = req.jukebox;
-            jukebox.findByIdAndUpdate(jukebox._id, { $set: req.body }, function (err, updated) {
+            jukebox.findByIdAndUpdate(jukebox.id, { $set: req.body }, function (err, updated) {
                 if (err) {
                     res.json(400, err);
                     return;
@@ -60,7 +72,7 @@ module.exports = function (models) {
         destroy: function (req, res) {
             var jukebox = req.jukebox;
             jukebox.remove(function (err) {
-                if(err) {
+                if (err) {
                     res.json(500, err);
                     return;
                 }

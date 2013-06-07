@@ -1,43 +1,27 @@
-var mongodb = require('mongodb'),
-    config = require('../config/default.json');
-
-var client = mongodb.MongoClient;
-var url = "mongodb://" + config.database.host + ":" + config.database.port + "/" + config.database.name;
+var Q = require('q'),
+    Helper = require('./migrationHelper')();
 
 exports.up = function (next) {
-    client.connect(url, function (err, db) {
-        "use strict";
-
-        db.createCollection('tracks', function(err, collection) {
-            if(err){
-                console.log(err);
-            }
-
-            collection.ensureIndex({ jukeboxId: 1, queuedAt: 1 }, function(err, indexName){
-                if(err){
-                    console.log(err);
-                }
-
-                db.close();
-
-                next();
-            });
+    Helper.connect
+        .then(function (db) {
+            return Q.ninvoke(db, 'createCollection', 'tracks');
+        })
+        .then(function (collection) {
+            return Q.ninvoke(collection, 'ensureIndex', { jukebox: 1, queuedAt: 1 });
+        })
+        .then(Helper.close)
+        .then(function () {
+            next();
         });
-    });
 };
 
 exports.down = function (next) {
-    client.connect(url, function (err, db) {
-        "use strict";
-
-        db.dropCollection('tracks', function(err, result) {
-            if(err){
-                console.log(err);
-            }
-
-            db.close();
-
+    Helper.connect
+        .then(function (db) {
+            return Q.ninvoke(db, 'dropCollection', 'tracks');
+        })
+        .then(Helper.close)
+        .then(function () {
             next();
         });
-    });
 };
