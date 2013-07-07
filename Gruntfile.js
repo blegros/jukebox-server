@@ -1,4 +1,5 @@
 module.exports = function (grunt) {
+
     //Load plugins
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -60,10 +61,10 @@ module.exports = function (grunt) {
     grunt.registerTask('init', function () {
         var fs = require("fs");
 
-        console.log("Creating build and dist dirs...");
+        console.log("Creating ./build and ./dist ...");
 
-        fs.mkdirSync('build');
-        fs.mkdirSync('dist');
+        fs.mkdirSync('./build');
+        fs.mkdirSync('./dist');
     });
 
     grunt.registerTask('unit-test', ['clean', 'init', 'mochaTest:unit-test']);
