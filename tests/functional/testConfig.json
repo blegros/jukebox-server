@@ -1,0 +1,20 @@
+{
+    "database": {
+        "name": "test",
+        "username": "",
+        "password": "",
+        "host": "localhost",
+        "port": 27017
+    },
+    "secrets": {
+        "password_salt": "abcd",
+        "client_password_salt": "zyxw"
+    },
+    "errorHandler": {
+        "enabled" : true
+    },
+    "logger": {
+        "level" : "dev"
+    },
+    "port": 3000
+}

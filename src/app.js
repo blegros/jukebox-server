@@ -67,38 +67,35 @@
  - Favorite jukeboxes
  */
 
-var express = require('express'),
-    Resource = require('express-resource'),
-    http = require('http'),
-    path = require('path');
+module.exports = function (config) {
+    "use strict";
 
-var app = express();
+    var express = require('express'),
+        Resource = require('express-resource'),
+        app = express(),
+        http = require('http'),
+        models = require('./models')(config),
+        controllers = require("./controllers")(models);
 
-//load app config
-var config = require('./config/default.json');
+    app.set('port', config.port);
+    app.set('models', models);
 
-//configure express
-app.set('port', config.port);
-app.use(express.logger(config.logger.level));
-app.use(express.compress());
-app.use(express.json());
-app.use(express.methodOverride());
-app.use(app.router);
+    //configure middleware
+    app.use(express.logger(config.logger.level));
+    app.use(express.compress());
+    app.use(express.json());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use(require('./middleware/globalErrorHandler'));
 
-app.use(function (err, req, res, next) {
-    console.error(err);
-    res.status(500);
-    next(err);
-});
+    //setup routes
+    require('./middleware/routes')(app, models, controllers);
 
-// configure ORM and load model definitions
-var models = require('./models')(config);
-app.set('models', models);
+    //create http server
+    var server = http.createServer(app);
 
-//setup routes
-require("./resources")(app, app.get('models'));
+    //create reference to app for use in bootstrap
+    server.app = app;
 
-// start server
-http.createServer(app).listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
-});
+    return server;
+};
