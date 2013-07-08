@@ -4,3 +4,9 @@ node_js:
   - "0.10"
 services:
   - mongodb
+notifications:
+  email:
+    recipients:
+      - me@brianlegros.com
+    on_success: change
+    on_failure: always
