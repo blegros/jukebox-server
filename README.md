@@ -1,7 +1,7 @@
 open-jukebox-server
 ==============
 
-![Travis CI](https://travis-ci.org/blegros/open-jukebox-server.png)
+[![Build Status](https://travis-ci.org/blegros/open-jukebox-server.png?branch=master)](https://travis-ci.org/blegros/open-jukebox-server)
 
 RESTful services for an assortment of open-jukebox clients
 
