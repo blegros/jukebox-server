@@ -8,7 +8,8 @@
     "private": true,
     "main": "./dist/bootstrap.js",
     "scripts": {
-        "start": "node ./dist/bootstrap.js"
+        "start": "node ./dist/bootstrap.js",
+        "test": "grunt ci"
     },
     "repository": {
         "type": "git",

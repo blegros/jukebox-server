@@ -59,16 +59,15 @@ module.exports = function (grunt) {
 
     //define tasks
     grunt.registerTask('init', function () {
-        var fs = require("fs");
-
         console.log("Creating ./build and ./dist ...");
 
-        fs.mkdirSync('./build');
-        fs.mkdirSync('./dist');
+        grunt.file.mkdir('./build');
+        grunt.file.mkdir('./dist');
     });
 
     grunt.registerTask('unit-test', ['clean', 'init', 'mochaTest:unit-test']);
     grunt.registerTask('integration-test', ['clean', 'init', 'mochaTest:integration-test']);
     grunt.registerTask('functional-test', ['clean', 'init', 'copy:prepare-distribution', 'express', 'mochaTest:functional-test', 'express-stop']);
+    grunt.registerTask('ci', ['clean', 'init', 'mochaTest:unit-test', 'mochaTest:integration-test', 'copy:prepare-distribution', 'express', 'mochaTest:functional-test', 'express-stop']);
     grunt.registerTask('default', ['clean', 'init', 'jshint', 'mochaTest:unit-test', 'mochaTest:integration-test', 'copy:prepare-distribution', 'express', 'mochaTest:functional-test', 'express-stop', 'apidoc']);
 };

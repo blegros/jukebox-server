@@ -1,6 +1,8 @@
 open-jukebox-server
 ==============
 
+![Travis CI](https://travis-ci.org/blegros/open-jukebox-server.png)
+
 RESTful services for an assortment of open-jukebox clients
 
 The MIT License (MIT)
