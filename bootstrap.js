@@ -1,8 +1,6 @@
-var config = require('./lib/config/default.json'),
-    server = require('./app')(config),
-    port = server.app.get('port');
+var server = require('./app')();
 
 // start server
-server.listen(port, function () {
-    console.log('Server listening on port ' + port);
+server.listen(server.port, function () {
+    console.log('Server listening on port ' + server.port);
 });

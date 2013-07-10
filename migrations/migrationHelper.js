@@ -2,7 +2,7 @@ module.exports = function () {
     "use strict";
 
     var Q = require('q'),
-        config = require('../lib/config/default.json'),
+        config = require('../lib/config')(process.env.NODE_ENV),
         client = require('mongodb'),
         url = "mongodb://" + config.database.host + ":" + config.database.port + "/" + config.database.name,
         connectionPromise = Q.ninvoke(client, 'connect', url);

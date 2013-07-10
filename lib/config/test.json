@@ -10,11 +10,8 @@
         "password_salt": "abcd",
         "client_password_salt": "zyxw"
     },
-    "errorHandler": {
-        "enabled" : true
-    },
     "logger": {
-        "level" : "dev"
+        "format" : "dev"
     },
-    "port": 3000
+    "port": 3500
 }

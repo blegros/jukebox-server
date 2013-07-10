@@ -1,1 +1,1 @@
-web: node ./dist/bootstrap.js
+web: node ./bootstrap.js

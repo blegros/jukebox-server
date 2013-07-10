@@ -1,0 +1,17 @@
+{
+    "database": {
+        "name": "real-deal",
+        "username": "",
+        "password": "",
+        "host": "localhost",
+        "port": 27017
+    },
+    "secrets": {
+        "password_salt": "776djl23!#23svkl;",
+        "client_password_salt": "987ofjalksj2or90*#$"
+    },
+    "logger": {
+        "format" : "default"
+    },
+    "port": 5000
+}

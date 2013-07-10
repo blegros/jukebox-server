@@ -1,6 +1,6 @@
 {
     "database": {
-        "name": "jukebox",
+        "name": "open-jukebox",
         "username": "",
         "password": "",
         "host": "localhost",
@@ -10,11 +10,8 @@
         "password_salt": "776djl23!#23svkl;",
         "client_password_salt": "987ofjalksj2or90*#$"
     },
-    "errorHandler": {
-        "enabled" : true
-    },
     "logger": {
-        "level" : "dev"
+        "format" : "dev"
     },
-    "port": 5000
+    "port": 3000
 }
