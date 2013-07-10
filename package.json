@@ -10,9 +10,9 @@
   ],
   "license": "MIT",
   "private": true,
-  "main": "./dist/bootstrap.js",
+  "main": "./bootstrap.js",
   "scripts": {
-    "start": "node ./dist/bootstrap.js",
+    "start": "node ./bootstrap.js",
     "test": "grunt ci"
   },
   "repository": {
