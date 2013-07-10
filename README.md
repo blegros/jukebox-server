@@ -3,6 +3,8 @@ open-jukebox-server
 
 [![Build Status](https://travis-ci.org/blegros/open-jukebox-server.png?branch=master)](https://travis-ci.org/blegros/open-jukebox-server)
 
+Follow project status on Trello @ https://trello.com/board/open-jukebox-server/51da3a988a87a0e17c00429a
+
 RESTful services for an assortment of open-jukebox clients
 
 The MIT License (MIT)

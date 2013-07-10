@@ -3,17 +3,25 @@ module.exports = function (grunt) {
     //Load plugins
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-mocha-test');
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-express');
     grunt.loadNpmTasks('grunt-apidoc');
 
     //initialize plugin configs
     grunt.initConfig({
-        clean: ['build', 'dist'],
+        clean: ['build'],
         jshint: {
             options: {},
-            src: ['src/**/*.js']
+            src: ['lib/**/*.js', 'app.js', 'bootstrap.js']
+        },
+        exec: {
+            'run-migrations-up': {
+                command: 'node_modules/migrate/bin/migrate up'
+            },
+            'run-migrations-down': {
+                command: 'node_modules/migrate/bin/migrate down'
+            }
         },
         mochaTest: {
             options: {
@@ -29,15 +37,6 @@ module.exports = function (grunt) {
                 src: ['test/functional/**/*Test.js']
             }
         },
-        copy: {
-            //copy over everything but the configuration file
-            'prepare-distribution': {
-                files: [
-                    //{expand: true, cwd: 'src/', src: ['**', '!config/**/*'], dest: 'dist/'}
-                    {expand: true, cwd: 'src/', src: ['**'], dest: 'dist/'}
-                ]
-            }
-        },
         express: {
             server: {
                 options: {
@@ -47,7 +46,7 @@ module.exports = function (grunt) {
         },
         apidoc: {
             'open-jukebox': {
-                src: 'src/',
+                src: 'lib/',
                 dest: 'build/apidoc/',
                 options: {
                     log: true,
@@ -59,15 +58,14 @@ module.exports = function (grunt) {
 
     //define tasks
     grunt.registerTask('init', function () {
-        console.log("Creating ./build and ./dist ...");
-
+        console.log("Creating ./build ...");
         grunt.file.mkdir('./build');
-        grunt.file.mkdir('./dist');
     });
 
+    grunt.registerTask('reset-db', ['exec:run-migrations-down', 'exec:run-migrations-up']);
     grunt.registerTask('unit-test', ['clean', 'init', 'mochaTest:unit-test']);
     grunt.registerTask('integration-test', ['clean', 'init', 'mochaTest:integration-test']);
-    grunt.registerTask('functional-test', ['clean', 'init', 'copy:prepare-distribution', 'express', 'mochaTest:functional-test', 'express-stop']);
-    grunt.registerTask('ci', ['clean', 'init', 'mochaTest:unit-test', 'mochaTest:integration-test', 'copy:prepare-distribution', 'express', 'mochaTest:functional-test', 'express-stop']);
-    grunt.registerTask('default', ['clean', 'init', 'jshint', 'mochaTest:unit-test', 'mochaTest:integration-test', 'copy:prepare-distribution', 'express', 'mochaTest:functional-test', 'express-stop', 'apidoc']);
+    grunt.registerTask('functional-test', ['clean', 'init', 'express', 'mochaTest:functional-test', 'express-stop']);
+    grunt.registerTask('ci', ['clean', 'init', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
+    grunt.registerTask('default', ['clean', 'init', 'jshint', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop', 'apidoc']);
 };

@@ -1,5 +1,5 @@
 var config = require('./testConfig.json'),
-    server = require('../../dist/app.js')(config),
+    server = require('../../app.js')(config),
     app = server.app;
 
 //Add functional testing hooks

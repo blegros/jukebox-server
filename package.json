@@ -1,48 +1,48 @@
 {
-    "name": "open-jukebox-server",
-    "version": "0.0.1",
-    "author": "Brian LeGros <me@brianlegros.com>",
-    "description": "RESTful services for use with open-jukebox clients",
-    "keywords": [
-        "music",
-        "jukebox",
-        "social"
-    ],
-    "license": "MIT",
-    "private": true,
-    "main": "./dist/bootstrap.js",
-    "scripts": {
-        "start": "node ./dist/bootstrap.js",
-        "test": "grunt ci"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/blegros/jukebox-server.git"
-    },
-    "engines": {
-        "node": "0.10.x",
-        "npm": "1.2.x"
-    },
-    "dependencies": {
-        "express": "3.2.5",
-        "express-resource": "1.0.0",
-        "migrate": "0.1.3",
-        "mongodb": "1.3.9",
-        "mongoose": "3.6.11",
-        "moment": "2.0.0",
-        "q": "0.9.4"
-    },
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-cli": "~0.1.9",
-        "grunt-mocha-test": "~0.5.0",
-        "grunt-contrib-jshint": "~0.6.0",
-        "grunt-apidoc": "~0.2.0",
-        "grunt-contrib-clean": "~0.4.1",
-        "grunt-contrib-copy": "~0.4.1",
-        "grunt-express": "~0.3.6",
-        "mocha": "~1.12.0",
-        "chai": "~1.7.2",
-        "sinon": "~1.7.3"
-    }
+  "name": "open-jukebox-server",
+  "version": "0.0.1",
+  "author": "Brian LeGros <me@brianlegros.com>",
+  "description": "RESTful services for use with open-jukebox clients",
+  "keywords": [
+    "music",
+    "jukebox",
+    "social"
+  ],
+  "license": "MIT",
+  "private": true,
+  "main": "./dist/bootstrap.js",
+  "scripts": {
+    "start": "node ./dist/bootstrap.js",
+    "test": "grunt ci"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blegros/open-jukebox-server.git"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "dependencies": {
+    "express": "3.2.5",
+    "express-resource": "1.0.0",
+    "migrate": "0.1.3",
+    "mongodb": "1.3.9",
+    "mongoose": "3.6.11",
+    "moment": "2.0.0",
+    "q": "0.9.4"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
+    "grunt-mocha-test": "~0.5.0",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-apidoc": "~0.2.0",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-express": "~0.3.6",
+    "mocha": "~1.12.0",
+    "chai": "~1.7.2",
+    "sinon": "~1.7.3",
+    "grunt-exec": "~0.4.2"
+  }
 }

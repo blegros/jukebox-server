@@ -74,11 +74,12 @@ module.exports = function (config) {
         Resource = require('express-resource'),
         app = express(),
         http = require('http'),
-        models = require('./models')(config),
-        controllers = require("./controllers")(models);
+        models = require('./lib/models')(config),
+        controllers = require("./lib/controllers")(models);
 
     app.set('port', config.port);
     app.set('models', models);
+    app.set('controllers', controllers);
 
     //configure middleware
     app.use(express.logger(config.logger.level));
@@ -86,10 +87,10 @@ module.exports = function (config) {
     app.use(express.json());
     app.use(express.methodOverride());
     app.use(app.router);
-    app.use(require('./middleware/globalErrorHandler'));
+    app.use(require('./lib/middleware/globalErrorHandler'));
 
     //setup routes
-    require('./middleware/routes')(app, models, controllers);
+    require('./routes')(app, models, controllers);
 
     //create http server
     var server = http.createServer(app);

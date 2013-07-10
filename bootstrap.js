@@ -1,4 +1,4 @@
-var config = require('./config/default.json'),
+var config = require('./lib/config/default.json'),
     server = require('./app')(config),
     port = server.app.get('port');
 
