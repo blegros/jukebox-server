@@ -19,5 +19,4 @@ node_modules
 *.sock
 
 migrations/.migrate
-dist
 build

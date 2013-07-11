@@ -12,6 +12,9 @@ module.exports = function (grunt) {
     //initialize plugin configs
     grunt.initConfig({
         env: {
+            options: {
+                NODE_MONGOOSE_MIGRATIONS_CONFIG: './migrations/config.json'
+            },
             dev: {
                 NODE_ENV: 'development'
             },
@@ -29,10 +32,10 @@ module.exports = function (grunt) {
         },
         exec: {
             'run-migrations-up': {
-                command: 'node_modules/migrate/bin/migrate up'
+                command: 'mongoose-migrate up'
             },
             'run-migrations-down': {
-                command: 'node_modules/migrate/bin/migrate down'
+                command: 'mongoose-migrate down'
             },
             server: {
                 command: 'node bootstrap.js'
@@ -81,17 +84,21 @@ module.exports = function (grunt) {
         grunt.task.run('env:test');
     });
 
-    grunt.registerTask('reset-db', ['exec:run-migrations-down', 'exec:run-migrations-up']);
+    var findEnvironmentTarget = function() {
+        return 'env:' + (grunt.option('env') || 'dev');
+    };
+
+    grunt.registerTask('reset-db', [findEnvironmentTarget(), 'exec:run-migrations-down', 'exec:run-migrations-up']);
+    grunt.registerTask('migrate', [findEnvironmentTarget(), 'exec:run-migrations-up']);
+
     grunt.registerTask('unit-test', ['clean', 'init', 'mochaTest:unit-test']);
     grunt.registerTask('integration-test', ['clean', 'init', 'mochaTest:integration-test']);
     grunt.registerTask('functional-test', ['clean', 'init', 'express', 'mochaTest:functional-test', 'express-stop']);
     grunt.registerTask('test', ['clean', 'init', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
+
     grunt.registerTask('ci', ['clean', 'init', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
 
-    grunt.registerTask('server', function() {
-        var environment = grunt.option('env') || process.env.NODE_ENV || 'dev';
-        grunt.task.run(['env:' + environment, 'exec:server']);
-    });
+    grunt.registerTask('server', [findEnvironmentTarget(), 'exec:server']);
 
     grunt.registerTask('default', ['clean', 'init', 'jshint', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop', 'apidoc']);
 };

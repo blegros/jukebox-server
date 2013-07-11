@@ -1,0 +1,23 @@
+{
+    "development": {
+        "schema": {
+            "migration": {}
+        },
+        "modelName": "Migration",
+        "db": "mongodb://localhost/open-jukebox"
+    },
+    "test": {
+        "schema": {
+            "migration": {}
+        },
+        "modelName": "Migration",
+        "db": "mongodb://localhost/test"
+    },
+    "production": {
+        "schema": {
+            "migration": {}
+        },
+        "modelName": "Migration",
+        "db": "mongodb://localhost/real_deal"
+    }
+}
