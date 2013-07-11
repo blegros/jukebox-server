@@ -39,6 +39,9 @@ module.exports = function (grunt) {
             },
             server: {
                 command: 'node ./bootstrap.js'
+            },
+            heroku: {
+                command: 'git push heroku master'
             }
         },
         mochaTest: {
@@ -100,6 +103,8 @@ module.exports = function (grunt) {
     grunt.registerTask('ci', ['clean', 'init', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
 
     grunt.registerTask('server', [findEnvironmentTarget(), 'exec:server']);
+
+    grunt.registerTask('deploy', ['exec:heroku']);
 
     grunt.registerTask('default', ['clean', 'init', 'jshint', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop', 'apidoc']);
 };
