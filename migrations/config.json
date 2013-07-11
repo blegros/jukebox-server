@@ -18,6 +18,6 @@
             "migration": {}
         },
         "modelName": "Migration",
-        "db": "mongodb://localhost/real_deal"
+        "db": "mongodb://open-jukebox-server:12345abcd!@ds035348.mongolab.com:35348/heroku_app16759897"
     }
 }

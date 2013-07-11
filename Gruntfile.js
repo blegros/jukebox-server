@@ -38,7 +38,7 @@ module.exports = function (grunt) {
                 command: 'mongoose-migrate down'
             },
             server: {
-                command: 'node bootstrap.js'
+                command: 'node ./bootstrap.js'
             }
         },
         mochaTest: {
@@ -89,7 +89,8 @@ module.exports = function (grunt) {
     };
 
     grunt.registerTask('reset-db', [findEnvironmentTarget(), 'exec:run-migrations-down', 'exec:run-migrations-up']);
-    grunt.registerTask('migrate', [findEnvironmentTarget(), 'exec:run-migrations-up']);
+    grunt.registerTask('clear-db', [findEnvironmentTarget(), 'exec:run-migrations-down']);
+    grunt.registerTask('migrate-db', [findEnvironmentTarget(), 'exec:run-migrations-up']);
 
     grunt.registerTask('unit-test', ['clean', 'init', 'mochaTest:unit-test']);
     grunt.registerTask('integration-test', ['clean', 'init', 'mochaTest:integration-test']);

@@ -1,10 +1,10 @@
 {
     "database": {
-        "name": "real-deal",
-        "username": "",
-        "password": "",
-        "host": "localhost",
-        "port": 27017
+        "name": "heroku_app16759897",
+        "username": "open-jukebox-server",
+        "password": "12345abcd!",
+        "host": "ds035348.mongolab.com",
+        "port": 35348
     },
     "secrets": {
         "password_salt": "776djl23!#23svkl;",

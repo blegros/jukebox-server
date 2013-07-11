@@ -12,7 +12,8 @@ exports.up = function (next) {
         .then(Helper.close)
         .then(function () {
             next();
-        });
+        })
+        .fail(Helper.error);
 };
 
 exports.down = function (next) {
@@ -23,5 +24,6 @@ exports.down = function (next) {
         .then(Helper.close)
         .then(function () {
             next();
-        });
+        })
+        .fail(Helper.error);
 };

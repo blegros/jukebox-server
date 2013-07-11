@@ -4,22 +4,27 @@ module.exports = function () {
     var Q = require('q'),
         config = require('../lib/config')(process.env.NODE_ENV),
         client = require('mongodb'),
-        url = "mongodb://" + config.database.host + ":" + config.database.port + "/" + config.database.name,
-        connectionPromise = Q.ninvoke(client, 'connect', url);
+        credentials = config.database.username && config.database.password ? config.database.username + ":" + config.database.password + "@" : '',
+        url = "mongodb://" + credentials + config.database.host + ":" + config.database.port + "/" + config.database.name;
 
-    Q.onerror = function(err) {
-        console.error(err);
+    console.log("Connecting to " + url + " ...");
+
+    var connectionPromise = Q.ninvoke(client, 'connect', url);
+
+    var onReject = function (err) {
+        console.log(err);
+        process.exit(123);
     };
+
+    connectionPromise.fail(onReject);
 
     return {
         connect: connectionPromise,
         close: function () {
-            return connectionPromise.then(function(db) {
+            return connectionPromise.then(function (db) {
                 db.close();
             });
         },
-        error: function (err) {
-            console.log(err);
-        }
+        error: onReject
     };
 };
