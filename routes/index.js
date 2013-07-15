@@ -13,6 +13,9 @@ module.exports = function (app, models, controllers) {
     app.get('/jukeboxes/:jukeboxId/tracks/now_playing', controllers.Tracks.showNowPlaying);
     app.get('/jukeboxes/:jukeboxId/tracks/recent', controllers.Tracks.showRecent);
     app.get('/jukeboxes/:jukeboxId/tracks/queued', controllers.Tracks.showUnPlayed);
+    app.post('/jukeboxes/:jukeboxId/tracks/:trackId/play', controllers.Tracks.play);
     app.post('/jukeboxes/:jukeboxId/tracks/:trackId/vote', controllers.Tracks.vote);
+    app.post('/jukeboxes/:jukeboxId/tracks/:trackId/done', controllers.Tracks.done);
+    app.get('/jukeboxes/:jukeboxId/tracks/:trackId/next', controllers.Tracks.next);
     app.get('/jukeboxes/:jukeboxId/clients', controllers.Jukeboxes.showClients);
 };
