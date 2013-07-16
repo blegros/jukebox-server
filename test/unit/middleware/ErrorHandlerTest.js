@@ -16,11 +16,11 @@ describe('Given middleware for unhandled exceptions', function () {
         it('should use the a verbose error handle', function () {
             errorHandler.withArgs({ dumpExceptions: true, showStack: true }).returns(success);
 
-            var errorHandlerDev = require(process.cwd() + '/lib/middleware/ErrorHandler')('development', express);
+            var errorHandlerDev = require('../../../lib/middleware/ErrorHandler')('development', express);
             errorHandlerDev.should.exist;
             errorHandlerDev().should.equal('success');
 
-            var errorHandlerTest = require(process.cwd() + '/lib/middleware/ErrorHandler')('test', express);
+            var errorHandlerTest = require('../../../lib/middleware/ErrorHandler')('test', express);
             errorHandlerTest.should.exist;
             errorHandlerTest().should.equal('success');
         });
@@ -30,7 +30,7 @@ describe('Given middleware for unhandled exceptions', function () {
         it('should use a concise error handler', function () {
             errorHandler.withArgs().returns(success);
 
-            var errorHandlerProd = require(process.cwd() + '/lib/middleware/ErrorHandler')('production', express);
+            var errorHandlerProd = require('../../../lib/middleware/ErrorHandler')('production', express);
             errorHandlerProd.should.exist;
             errorHandlerProd().should.equal('success');
         });
@@ -39,7 +39,7 @@ describe('Given middleware for unhandled exceptions', function () {
     describe('when the environment is not found', function () {
         it('should throw an error', function () {
             try {
-                require(process.cwd() + '/lib/middleware/ErrorHandler')('blah');
+                require('../../../lib/middleware/ErrorHandler')('blah');
             }
             catch (e) {
                 e.should.have.property('message').that.contain('blah');
