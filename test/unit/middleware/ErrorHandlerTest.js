@@ -30,6 +30,8 @@ describe('Given middleware for unhandled exceptions', function () {
         it('should use a concise error handler', function () {
             errorHandler.withArgs().returns(success);
 
+            console.log(__dirname);
+
             var errorHandlerProd = require('../../../lib/middleware/ErrorHandler')('production', express);
             errorHandlerProd.should.exist;
             errorHandlerProd().should.equal('success');

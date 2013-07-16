@@ -10,8 +10,20 @@
         "location": [0, 0]
     },
     "jukeboxesNearEachOther": {
-        "within5Meters": {},
-        "within25Meters": {},
-        "within75Meters": {}
+        "within5Meters": {
+            "name": "Matt's Casbah",
+            "address": "801 E New Haven Ave, Melbourne, FL 32901",
+            "location": [-80.607776,28.078394]
+        },
+        "within25Meters": {
+            "name": "Burger Place",
+            "address": "811 E New Haven Ave, Melbourne FL 32901",
+            "location": [-80.607430, 28.078394]
+        },
+        "within75Meters": {
+            "name": "Meg O'Malleys",
+            "address": "812 E New Haven Ave, Melbourne, FL 32901",
+            "location": [0, 0]
+        }
     }
 }
