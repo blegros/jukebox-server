@@ -82,9 +82,6 @@ module.exports = function (grunt) {
     grunt.registerTask('init', function () {
         console.log("Creating ./build ...");
         grunt.file.mkdir('./build');
-
-        console.log("Setting up env ...");
-        grunt.task.run('env:test');
     });
 
     var findEnvironmentTarget = function() {
@@ -95,16 +92,16 @@ module.exports = function (grunt) {
     grunt.registerTask('clear-db', [findEnvironmentTarget(), 'exec:run-migrations-down']);
     grunt.registerTask('migrate-db', [findEnvironmentTarget(), 'exec:run-migrations-up']);
 
-    grunt.registerTask('unit-test', ['clean', 'init', 'mochaTest:unit-test']);
-    grunt.registerTask('integration-test', ['clean', 'init', 'mochaTest:integration-test']);
-    grunt.registerTask('functional-test', ['clean', 'init', 'express', 'mochaTest:functional-test', 'express-stop']);
-    grunt.registerTask('test', ['clean', 'init', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
+    grunt.registerTask('unit-test', ['init', 'env:test', 'mochaTest:unit-test']);
+    grunt.registerTask('integration-test', ['init', 'env:test', 'mochaTest:integration-test']);
+    grunt.registerTask('functional-test', ['init', 'env:test', 'express', 'mochaTest:functional-test', 'express-stop']);
+    grunt.registerTask('test', ['clean', 'init', 'env:test', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
 
-    grunt.registerTask('ci', ['clean', 'init', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
+    grunt.registerTask('ci', ['clean', 'init', 'env:test', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop']);
 
     grunt.registerTask('server', [findEnvironmentTarget(), 'exec:server']);
 
     grunt.registerTask('deploy', ['exec:heroku']);
 
-    grunt.registerTask('default', ['clean', 'init', 'jshint', 'mochaTest:unit-test', 'reset-db', 'mochaTest:integration-test', 'express', 'mochaTest:functional-test', 'express-stop', 'apidoc']);
+    grunt.registerTask('default', ['ci', 'jshint', 'apidoc']);
 };

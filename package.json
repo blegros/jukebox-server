@@ -47,6 +47,8 @@
     "sinon": "~1.7.3",
     "grunt-exec": "~0.4.2",
     "grunt-env": "~0.4.0",
-    "mongoose-migrate": "~0.1.4"
+    "mongoose-migrate": "~0.1.4",
+    "mocha-mongoose": "~0.1.5",
+    "sinon-chai": "~2.4.0"
   }
 }

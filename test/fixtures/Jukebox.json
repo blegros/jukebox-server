@@ -1,0 +1,17 @@
+{
+    "simple": {
+        "name": "Jukebox 1",
+        "address": "TrepHub, Melbourne, FL",
+        "location": [0, 0]
+    },
+    "forUpdate": {
+        "name": "Jukebox 2",
+        "address": "TrepHub, Melbourne, FL",
+        "location": [0, 0]
+    },
+    "jukeboxesNearEachOther": {
+        "within5Meters": {},
+        "within25Meters": {},
+        "within75Meters": {}
+    }
+}
